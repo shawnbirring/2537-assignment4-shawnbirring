@@ -1,10 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useState, useRef } from "react";
-import CardState from "../Interfaces/ICardState";
-import fetchPokemon from "../Utils/fetchPokemon";
-import PokemonGrid from "../Components/PokemonGrid";
-import { shuffleArray, checkForMatch } from "../Utils/gameLogic";
 import { Typography } from "@mui/material";
+import CardState from "@/interfaces/ICardState";
+import Pokemon from "@/interfaces/IPokemon";
+import fetchPokemon from "@/utils/fetchPokemon";
+import { shuffleArray, checkForMatch } from "@/utils/gameLogic";
+import PokemonGrid from "./PokemonGrid";
 
 export default function Game({ difficulty }: { difficulty: number }) {
   const [cards, setCards] = useState<CardState[]>([]);
@@ -16,32 +18,19 @@ export default function Game({ difficulty }: { difficulty: number }) {
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [powerUp, setPowerUp] = useState<boolean>(false);
   const powerUpRef = useRef<NodeJS.Timeout | null>(null);
+  const cardsRef = useRef(cards);
 
   const fetchNewGame = async () => {
     const data = await fetchPokemon(difficulty);
-    const cardData = shuffleArray([...data, ...data]).map((pokemon) => ({
-      pokemon,
-      flipped: false,
-      canFlip: true,
-    }));
+    const cardData = shuffleArray([...data, ...data]).map(
+      (pokemon: Pokemon) => ({
+        pokemon,
+        flipped: false,
+        canFlip: true,
+      })
+    );
     setCards(cardData);
   };
-
-  useEffect(() => {
-    fetchNewGame();
-  }, [difficulty]);
-
-  useEffect(() => {
-    if (powerUpRef.current !== null) {
-      clearTimeout(powerUpRef.current);
-    }
-
-    const powerUpTime = Math.random() * (30000 - 20000) + 20000; // Between 20 and 30 seconds
-
-    powerUpRef.current = setTimeout(() => {
-      activatePowerUp();
-    }, powerUpTime);
-  }, [powerUp]);
 
   const handleFlip = (index: number) => {
     if (
@@ -58,6 +47,14 @@ export default function Game({ difficulty }: { difficulty: number }) {
     setPair((prev) => [...prev, index]);
     setClicks(clicks + 1);
   };
+
+  useEffect(() => {
+    fetchNewGame();
+  }, [difficulty]);
+
+  useEffect(() => {
+    cardsRef.current = cards;
+  }, [cards]);
 
   useEffect(() => {
     if (pair.length < 2) return;
@@ -82,6 +79,17 @@ export default function Game({ difficulty }: { difficulty: number }) {
   }, [pair]);
 
   useEffect(() => {
+    if (powerUpRef.current !== null) {
+      clearTimeout(powerUpRef.current);
+    }
+    const powerUpTime = Math.random() * (30000 - 20000) + 20000;
+
+    powerUpRef.current = setTimeout(() => {
+      activatePowerUp();
+    }, powerUpTime);
+  }, [powerUp]);
+
+  useEffect(() => {
     if (pairs === 0) {
       setGameOver(true);
     } else if (timeLeft <= 0) {
@@ -98,8 +106,8 @@ export default function Game({ difficulty }: { difficulty: number }) {
   const activatePowerUp = () => {
     if (powerUp) return;
     setPowerUp(true);
-    const originalState = [...cards];
-    setCards(cards.map((card) => ({ ...card, flipped: true })));
+    const originalState = [...cardsRef.current];
+    setCards(cardsRef.current.map((card) => ({ ...card, flipped: true })));
     setTimeout(() => {
       setCards(originalState);
       setPowerUp(false);
@@ -108,8 +116,6 @@ export default function Game({ difficulty }: { difficulty: number }) {
 
   return (
     <>
-      <br></br>
-      <button onClick={activatePowerUp}>activate me</button>
       <Typography>Difficulty: {difficulty}</Typography>
       <Typography>Total pairs: {difficulty}</Typography>
       <Typography>Matches: {matches}</Typography>

@@ -1,4 +1,4 @@
-import Pokemon from "../Interfaces/IPokemon";
+import Pokemon from "@/interfaces/IPokemon";
 
 const getPokemon = async (id: number): Promise<Pokemon> => {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);

@@ -1,10 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
-import Game from "../Components/Game";
 import { Button, Container, Box, Typography, Switch } from "@mui/material";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import Game from "@/components/Game";
 
 export default function Home() {
-  const [difficulty, setDifficulty] = useState<number | null>(null);
+  const [difficulty, setDifficulty] = useState<number>(5);
   const [gameStarted, setGameStarted] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -18,13 +23,13 @@ export default function Home() {
 
   const handleReset = () => {
     setGameStarted(false);
-    setDifficulty(null);
+    setDifficulty(5);
   };
 
   useEffect(() => {
     const bodyElement = document.querySelector("body");
     const textElements = document.querySelectorAll(
-      "body, h1, h2, h3, h4, h5, h6, p, span, a, button"
+      "body, h1, h2, h3, h4, h5, h6, p, span, a"
     );
 
     if (bodyElement && darkMode) {
@@ -63,51 +68,37 @@ export default function Home() {
 
         {!gameStarted && (
           <Box sx={{ my: 2 }}>
-            <Button
-              sx={{
-                m: 1,
-                backgroundColor: difficulty === 5 ? "black" : "white",
-                color: difficulty === 5 ? "grey" : "black",
-              }}
-              onClick={() => setDifficulty(5)}
-            >
-              Easy
-            </Button>
-            <Button
-              sx={{
-                m: 1,
-                backgroundColor: difficulty === 12 ? "black" : "white",
-                color: difficulty === 12 ? "grey" : "black",
-              }}
-              onClick={() => setDifficulty(12)}
-            >
-              Medium
-            </Button>
-            <Button
-              sx={{
-                m: 1,
-                backgroundColor: difficulty === 24 ? "black" : "white",
-                color: difficulty === 24 ? "grey" : "black",
-              }}
-              onClick={() => setDifficulty(24)}
-            >
-              Hard
-            </Button>
+            <FormControl>
+              <FormLabel id="demo-radio-buttons-group-label">
+                <Typography variant="h6" gutterBottom>
+                  Difficulty
+                </Typography>
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="female"
+                name="radio-buttons-group"
+                value={difficulty}
+                onChange={(_, value) => setDifficulty(parseInt(value))}
+              >
+                <FormControlLabel value={5} control={<Radio />} label="Easy" />
+                <FormControlLabel
+                  value={12}
+                  control={<Radio />}
+                  label="Medium"
+                />
+                <FormControlLabel value={24} control={<Radio />} label="Hard" />
+              </RadioGroup>
+            </FormControl>
           </Box>
         )}
 
         {gameStarted ? (
-          <Button
-            sx={{ color: "black", backgroundColor: "white" }}
-            onClick={handleReset}
-          >
+          <Button color="secondary" variant="contained" onClick={handleReset}>
             Reset Game
           </Button>
         ) : (
-          <Button
-            sx={{ color: "black", backgroundColor: "white" }}
-            onClick={handleStart}
-          >
+          <Button color="secondary" variant="contained" onClick={handleStart}>
             Start Game
           </Button>
         )}
