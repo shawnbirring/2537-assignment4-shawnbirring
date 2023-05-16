@@ -27,15 +27,17 @@ export default function Home() {
       "body, h1, h2, h3, h4, h5, h6, p, span, a"
     );
 
-    if (darkMode) {
+    if (bodyElement && darkMode) {
       bodyElement.style.backgroundColor = "#1f2937";
       textElements.forEach((element) => {
-        element.style.color = "#fff";
+        const htmlElement = element as HTMLElement;
+        htmlElement.style.color = "#fff";
       });
-    } else {
+    } else if (bodyElement) {
       bodyElement.style.backgroundColor = "#fff";
       textElements.forEach((element) => {
-        element.style.color = "#000";
+        const htmlElement = element as HTMLElement;
+        htmlElement.style.color = "#000";
       });
     }
   }, [darkMode]);
