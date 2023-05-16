@@ -24,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     const bodyElement = document.querySelector("body");
     const textElements = document.querySelectorAll(
-      "body, h1, h2, h3, h4, h5, h6, p, span, a"
+      "body, h1, h2, h3, h4, h5, h6, p, span, a, button"
     );
 
     if (bodyElement && darkMode) {
@@ -45,7 +45,12 @@ export default function Home() {
   return (
     <Container>
       <Box
-        className="flex flex-col items-center justify-center min-h-screen py-2"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+        py={2}
         sx={{ mt: 8 }}
       >
         <Typography variant="h3" gutterBottom>
@@ -59,32 +64,32 @@ export default function Home() {
         {!gameStarted && (
           <Box sx={{ my: 2 }}>
             <Button
-              className={`m-4 ${
-                difficulty === 5
-                  ? "bg-black text-white hover:bg-black hover:text-white"
-                  : "bg-white text-black"
-              }`}
+              sx={{
+                m: 1,
+                backgroundColor: difficulty === 5 ? "black" : "white",
+                color: difficulty === 5 ? "grey" : "black",
+              }}
               onClick={() => setDifficulty(5)}
             >
               Easy
             </Button>
             <Button
-              className={`m-4 ${
-                difficulty === 10
-                  ? "bg-black text-white hover:bg-black hover:text-white "
-                  : "bg-white text-black"
-              }`}
-              onClick={() => setDifficulty(10)}
+              sx={{
+                m: 1,
+                backgroundColor: difficulty === 12 ? "black" : "white",
+                color: difficulty === 12 ? "grey" : "black",
+              }}
+              onClick={() => setDifficulty(12)}
             >
               Medium
             </Button>
             <Button
-              className={`m-4 ${
-                difficulty === 15
-                  ? "bg-black text-white hover:bg-black hover:text-white "
-                  : "bg-white text-black"
-              }`}
-              onClick={() => setDifficulty(15)}
+              sx={{
+                m: 1,
+                backgroundColor: difficulty === 24 ? "black" : "white",
+                color: difficulty === 24 ? "grey" : "black",
+              }}
+              onClick={() => setDifficulty(24)}
             >
               Hard
             </Button>
@@ -93,14 +98,14 @@ export default function Home() {
 
         {gameStarted ? (
           <Button
-            className="text-black bg-white hover:bg-black hover:text-white"
+            sx={{ color: "black", backgroundColor: "white" }}
             onClick={handleReset}
           >
             Reset Game
           </Button>
         ) : (
           <Button
-            className="text-black bg-white hover:bg-black hover:text-white"
+            sx={{ color: "black", backgroundColor: "white" }}
             onClick={handleStart}
           >
             Start Game

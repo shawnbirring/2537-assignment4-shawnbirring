@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import CardState from "../Interfaces/ICardState";
 import fetchPokemon from "../Utils/fetchPokemon";
 import PokemonGrid from "../Components/PokemonGrid";
@@ -12,9 +12,10 @@ export default function Game({ difficulty }: { difficulty: number }) {
   const [pairs, setPairs] = useState<number>(difficulty);
   const [matches, setMatches] = useState<number>(0);
   const [clicks, setClicks] = useState<number>(0);
-  const [timeLeft, setTimeLeft] = useState<number>(difficulty * 2 * 60);
+  const [timeLeft, setTimeLeft] = useState<number>(difficulty * 10);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [powerUp, setPowerUp] = useState<boolean>(false);
+  const powerUpRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchNewGame = async () => {
     const data = await fetchPokemon(difficulty);
@@ -29,6 +30,18 @@ export default function Game({ difficulty }: { difficulty: number }) {
   useEffect(() => {
     fetchNewGame();
   }, [difficulty]);
+
+  useEffect(() => {
+    if (powerUpRef.current !== null) {
+      clearTimeout(powerUpRef.current);
+    }
+
+    const powerUpTime = Math.random() * (30000 - 20000) + 20000; // Between 20 and 30 seconds
+
+    powerUpRef.current = setTimeout(() => {
+      activatePowerUp();
+    }, powerUpTime);
+  }, [powerUp]);
 
   const handleFlip = (index: number) => {
     if (
@@ -69,8 +82,11 @@ export default function Game({ difficulty }: { difficulty: number }) {
   }, [pair]);
 
   useEffect(() => {
-    if (timeLeft <= 0 || pairs === 0) {
+    if (pairs === 0) {
       setGameOver(true);
+    } else if (timeLeft <= 0) {
+      setGameOver(true);
+      clearTimeout(powerUpRef.current!);
     } else {
       const timer = setTimeout(() => {
         setTimeLeft(timeLeft - 1);
@@ -82,11 +98,10 @@ export default function Game({ difficulty }: { difficulty: number }) {
   const activatePowerUp = () => {
     if (powerUp) return;
     setPowerUp(true);
-    const newCards = cards.map((card) => ({ ...card, flipped: true }));
-    setCards(newCards);
+    const originalState = [...cards];
+    setCards(cards.map((card) => ({ ...card, flipped: true })));
     setTimeout(() => {
-      const newCards = cards.map((card) => ({ ...card, flipped: false }));
-      setCards(newCards);
+      setCards(originalState);
       setPowerUp(false);
     }, 3000);
   };
@@ -110,7 +125,8 @@ export default function Game({ difficulty }: { difficulty: number }) {
       <PokemonGrid cards={cards} onFlip={handleFlip} />
       {gameOver && (
         <Typography variant="h5">
-          <br></br>You Win!
+          <br></br>
+          {pairs === 0 ? "You Win!" : "You Lose!"}
         </Typography>
       )}
     </>

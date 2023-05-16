@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import PokemonCard from "./PokemonCard";
 import CardState from "../Interfaces/ICardState";
 
@@ -8,17 +9,18 @@ type PokemonGridProps = {
 
 const PokemonGrid = ({ cards, onFlip }: PokemonGridProps) => {
   return (
-    <div className="grid grid-cols-5 gap-4">
+    <Grid container spacing={2}>
       {cards.map((card, index) => (
-        <PokemonCard
-          key={index}
-          index={index}
-          pokemon={card.pokemon}
-          flipped={card.flipped}
-          onFlip={onFlip}
-        />
+        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={index}>
+          <PokemonCard
+            index={index}
+            pokemon={card.pokemon}
+            flipped={card.flipped}
+            onFlip={onFlip}
+          />
+        </Grid>
       ))}
-    </div>
+    </Grid>
   );
 };
 
