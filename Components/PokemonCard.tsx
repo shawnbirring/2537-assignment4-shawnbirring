@@ -1,7 +1,7 @@
 import { Card, CardActionArea } from "@mui/material";
 import Image from "next/image";
-import Pokemon from "@/interfaces/IPokemon";
-import "@/styles/card.css";
+import Pokemon from "../interfaces/IPokemon";
+import "../styles/card.css";
 
 type PokemonCardProps = {
   pokemon: Pokemon;

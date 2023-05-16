@@ -6,7 +6,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import Game from "@/components/Game";
+import Game from "../components/Game";
 
 export default function Home() {
   const [difficulty, setDifficulty] = useState<number>(5);

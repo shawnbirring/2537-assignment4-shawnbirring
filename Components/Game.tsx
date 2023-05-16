@@ -2,10 +2,10 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { Typography } from "@mui/material";
-import CardState from "@/interfaces/ICardState";
-import Pokemon from "@/interfaces/IPokemon";
-import fetchPokemon from "@/utils/fetchPokemon";
-import { shuffleArray, checkForMatch } from "@/utils/gameLogic";
+import CardState from "../interfaces/ICardState";
+import Pokemon from "../interfaces/IPokemon";
+import fetchPokemon from "../utils/fetchPokemon";
+import { shuffleArray, checkForMatch } from "../utils/gameLogic";
 import PokemonGrid from "./PokemonGrid";
 
 export default function Game({ difficulty }: { difficulty: number }) {

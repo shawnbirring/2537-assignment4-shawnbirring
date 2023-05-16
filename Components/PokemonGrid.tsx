@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import PokemonCard from "./PokemonCard";
-import CardState from "@/interfaces/ICardState";
+import CardState from "../interfaces/ICardState";
 
 type PokemonGridProps = {
   cards: CardState[];
