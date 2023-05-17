@@ -1,3 +1,4 @@
+"use client";
 import { Card, CardActionArea } from "@mui/material";
 import Image from "next/image";
 import Pokemon from "../interfaces/IPokemon";
